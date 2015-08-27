@@ -25,9 +25,11 @@ class ArticlesController extends Controller
         return view('articles.index')->with(compact('articles'));
      }
 
-     public function getShow()
+     public function getShow($id)
      {
+        $articles = $this->article->find($id);
 
+        return view('articles.show')->withArticle($articles);
      }
 
      public function getCreate()
@@ -44,18 +46,29 @@ class ArticlesController extends Controller
         return redirect()->to('articles/index');
      }
 
-     public function getEdit()
+     public function getEdit($id)
      {
+        $article = $this->article->find($id);
+ 
+        return view('articles.edit')->withArticle($article);
+     }
+
+     public function postEdit(Request $request,$id)
+     {
+        $article = $this->article->find($id);
+        $data = $request->all();
+        $article->fill($data);
+        $article->save();
+ 
+        return redirect()->to('articles/index');
 
      }
 
-     public function postEdit()
+     public function postDelete($id)
      {
+        $article = $this->article->find($id);
+        $article->delete();
 
-     }
-
-     public function postDelete()
-     {
-
+        return redirect()->to('articles/index');
      }
 }
